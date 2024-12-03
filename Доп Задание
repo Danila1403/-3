@@ -1,0 +1,23 @@
+def find_password(number_from_gate, digits):
+    password = ""
+    digit_pairs = []
+
+    digits_str = str(digits)
+
+    for i in range(len(digits_str)):
+        for j in range(i + 1, len(digits_str)):
+            pair = (int(digits_str[i]), int(digits_str[j]))
+            pair_sum = pair[0] + pair[1]
+
+            # Проверяем, кратно ли число сумме пары
+            if number_from_gate % pair_sum == 0:
+                digit_pairs.append(pair)
+                password += str(pair[0]) + str(pair[1])
+
+    return password if password else "Не удалось найти подходящий пароль"
+
+number_from_gate = 11  # Число из первой вставки
+password_input = 11029384756  # Число, из которого будем извлекать пары
+
+result = find_password(number_from_gate, password_input)
+print(f"Пароль для числа {number_from_gate}: {result}")
