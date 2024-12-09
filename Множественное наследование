@@ -1,0 +1,70 @@
+import random
+
+# Базовый класс Animal
+class Animal:
+    live = True
+    sound = None
+    DEGREE_OF_DANGER = 0
+
+    def __init__(self, speed):
+        self.cords = [0, 0, 0]  # Координаты в пространстве
+        self.speed = speed  # Скорость передвижения
+
+    def move(self, dx, dy, dz):
+        if dz != 0:  # Попытка изменить координаты по z
+            print("It's too deep, I can't dive :(")
+            return
+        self.cords[0] += dx * self.speed
+        self.cords[1] += dy * self.speed
+        self.cords[2] += dz * self.speed
+
+    def get_cords(self):
+        print(f"X: {self.cords[0]} Y: {self.cords[1]} Z: {self.cords[2]}")
+
+    def attack(self):
+        if self.DEGREE_OF_DANGER < 5:
+            print("Be careful, i'm peaceful!")
+        else:
+            print(f"Be careful, i'm attacking you {self.cords[0]} {self.cords[1]}")
+
+# Класс Bird
+class Bird(Animal):
+    beak = True
+
+    def lay_eggs(self):
+        print(f"Here are(is) {random.randint(1, 4)} eggs for you")
+
+# Класс AquaticAnimal
+class AquaticAnimal(Animal):
+    DEGREE_OF_DANGER = 3
+
+    def dive(self, dz):
+        if dz > 0:  # Уменьшение по модулю, чтобы погружаться вниз
+            dz = -abs(dz)
+        self.cords[2] += dz * (self.speed / 2)  # Скорость уменьшается в 2 раза
+
+# Класс PoisonousAnimal
+class PoisonousAnimal(Animal):
+    DEGREE_OF_DANGER = 8
+
+# Класс Duckbill
+class Duckbill(Bird, AquaticAnimal, PoisonousAnimal):
+    DEGREE_OF_DANGER = 8  # Явно устанавливаем степень опасности для утконоса
+
+    def __init__(self, speed):
+        super().__init__(speed)
+        self.sound = "Click-click-click"
+
+    def speak(self):
+        print(self.sound)
+
+db = Duckbill(10)
+print(db.live)
+print(db.beak)
+db.speak()
+db.attack()
+db.move(1, 2, 0)
+db.get_cords()
+db.dive(6)
+db.get_cords()
+db.lay_eggs()
